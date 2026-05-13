@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, Variants } from 'framer-motion';
 import { 
   Camera, ShieldCheck, Smartphone, 
   Zap, Layout, Phone, 
@@ -13,17 +13,26 @@ export default function VSACyberFinal() {
   const { scrollYProgress } = useScroll();
   const yRange = useTransform(scrollYProgress, [0, 1], [0, -300]);
 
-  const fadeInUp = {
+  // הגדרת הטיפוס כ-Variants או כאובייקט פרופס של Framer Motion
+  const fadeInUp: any = {
     initial: { opacity: 0, y: 40 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true },
     transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
   };
 
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.style.display = 'none';
+  };
+
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+
   return (
     <div className="min-h-screen bg-[#020203] text-white font-sans selection:bg-blue-500/30 overflow-x-hidden italic antialiased" dir="rtl">
       
-      {/* --- BACKGROUND ENGINE (NO IMAGES) --- */}
+      {/* --- BACKGROUND ENGINE --- */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-blue-600/10 blur-[150px] rounded-full animate-pulse" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-900/10 blur-[150px] rounded-full" />
@@ -45,7 +54,7 @@ export default function VSACyberFinal() {
                 src="/vsa2.jpg" 
                 alt="VSA Logo" 
                 className="w-full h-full object-contain p-1 z-10" 
-                onError={(e) => (e.currentTarget.style.display = 'none')}
+                onError={handleImageError}
               />
               <Cpu size={24} className="absolute text-white/40 group-hover:scale-110 transition-transform" />
             </div>
@@ -82,8 +91,8 @@ export default function VSACyberFinal() {
             ב-V.S.A אנחנו לא מוכרים "הכי זול" - אנחנו מתקינים <span className="text-white font-bold italic underline decoration-blue-600 underline-offset-8">שקט נפשי.</span>
           </p>
 
-          <div className="flex flex-col md:flex-row gap-6 justify-center items-center w-full max-w-sm md:max-w-none">
-            <a href="tel:0503029336" className="w-full md:w-auto px-16 py-7 bg-blue-600 text-white font-[1000] text-2xl md:text-3xl rounded-2xl shadow-[0_0_50px_rgba(37,99,235,0.4)] hover:scale-105 transition-all">
+          <div className="flex justify-center items-center">
+            <a href="tel:0503029336" className="w-full md:w-auto px-16 py-7 bg-blue-600 text-white font-[1000] text-2xl md:text-3xl rounded-2xl shadow-[0_0_50px_rgba(37,99,235,0.4)] hover:scale-105 transition-all text-center">
               050-3029336
             </a>
           </div>
@@ -118,23 +127,19 @@ export default function VSACyberFinal() {
 
       {/* --- DYNAMIC TECH SECTION --- */}
       <section className="py-40 px-6 z-10 bg-blue-600/5 border-y border-white/5 relative">
-        <div className="absolute left-10 top-0 bottom-0 opacity-[0.05] hidden lg:block text-[10px] font-mono whitespace-pre">
-           {Array(20).fill("01011010110\n11001010110\n10101001011").join("\n")}
-        </div>
-
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-          <motion.div {...fadeInUp}>
+          <motion.div initial={fadeInUp.initial} whileInView={fadeInUp.whileInView} viewport={fadeInUp.viewport} transition={fadeInUp.transition}>
             <h2 className="text-5xl md:text-8xl font-[1000] italic leading-[0.8] mb-10 uppercase">
               סוף לעבודות <br/><span className="text-blue-500 italic">החובבניות.</span>
             </h2>
             <p className="text-xl text-slate-400 italic mb-10 leading-relaxed">
-              ויקטור טהר מעניק לכם מעטפת אבטחה שלמה. משלב התכנון ועד למסירת מערכת מוכנה לעבודה מלאה, ללא צורך בהתעסקויות נוספות.
+              ויקטור טהר מעניק לכם מעטפת אבטחה שלמה. משלב התכנון ועד למסירת מערכת מוכנה לעבודה מלאה.
             </p>
             <div className="space-y-4">
               {[
                 { t: "תכנון מקצועי לפי מבנה הנכס", icon: <Target /> },
-                { t: "ציוד ברמה גבוהה מאוד (איכות וביצועים)", icon: <Activity /> },
-                { t: "הגדרה מלאה כולל שליטה מהטלפון", icon: <Smartphone /> }
+                { t: "ציוד ברמה גבוהה מאוד", icon: <Activity /> },
+                { t: "הגדרה מלאה ושליטה מהנייד", icon: <Smartphone /> }
               ].map((item, idx) => (
                 <div key={idx} className="flex items-center gap-4 p-5 bg-black/40 rounded-2xl border border-white/5 group hover:border-blue-500 transition-colors">
                   <span className="text-blue-500 group-hover:scale-110 transition-transform">{item.icon}</span>
@@ -146,9 +151,8 @@ export default function VSACyberFinal() {
           
           <div className="relative">
              <div className="relative p-12 bg-black border border-blue-500/20 rounded-[4rem] text-center shadow-[0_0_100px_rgba(37,99,235,0.1)]">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,#3b82f610_0%,transparent_70%)]" />
                 <Binary size={120} className="mx-auto text-blue-500/20 mb-8 animate-pulse" />
-                <p className="text-3xl font-[1000] italic tracking-tighter text-white">V.S.A CORE</p>
+                <p className="text-3xl font-[1000] italic tracking-tighter text-white uppercase">V.S.A Core</p>
                 <div className="mt-6 flex justify-center gap-2">
                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" />
                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce [animation-delay:0.2s]" />
@@ -159,29 +163,22 @@ export default function VSACyberFinal() {
         </div>
       </section>
 
-      {/* --- CONTACT SECTION (REPLACED STAY SECURE) --- */}
+      {/* --- CONTACT SECTION --- */}
       <section className="relative py-48 px-6 z-10">
         <motion.div 
-          whileHover={{ scale: 1.01 }}
           className="max-w-6xl mx-auto bg-[#0a0a0c] border border-blue-500/30 p-8 md:p-20 rounded-[4rem] relative overflow-hidden"
         >
-          <div className="absolute bottom-0 left-0 w-full opacity-10">
-            <Waves className="w-full text-blue-500" />
-          </div>
-
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start text-right">
             <div>
               <h2 className="text-5xl md:text-8xl font-[1000] italic leading-tight mb-8 uppercase tracking-tighter">
                 דברו <br /><span className="text-blue-500 font-black">איתנו.</span>
               </h2>
-              <p className="text-xl text-slate-400 italic mb-12">
-                זקוקים לייעוץ מקצועי או הצעת מחיר? השאירו פרטים או שלחו הודעה ישירה לווצאפ של ויקטור.
-              </p>
               
               <div className="flex flex-col gap-4">
                 <a 
                   href="https://wa.me/972503029336" 
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center justify-center gap-4 px-8 py-6 bg-green-600 hover:bg-green-500 text-white rounded-3xl font-black text-2xl md:text-3xl transition-all shadow-[0_0_30px_rgba(22,163,74,0.3)]"
                 >
                   <MessageCircle size={32} />
@@ -199,32 +196,30 @@ export default function VSACyberFinal() {
 
             <div className="bg-white/[0.03] p-8 md:p-12 rounded-[3rem] border border-white/5 backdrop-blur-xl">
               <h3 className="text-2xl font-black italic mb-8 border-r-4 border-blue-500 pr-4 uppercase">השאירו פרטים</h3>
-              <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+              <form className="space-y-4" onSubmit={handleFormSubmit}>
                 <input 
                   type="text" 
                   placeholder="שם מלא" 
                   className="w-full bg-black/50 border border-white/10 p-5 rounded-2xl focus:border-blue-500 outline-none transition-all italic"
+                  required
                 />
                 <input 
                   type="tel" 
                   placeholder="טלפון" 
                   className="w-full bg-black/50 border border-white/10 p-5 rounded-2xl focus:border-blue-500 outline-none transition-all italic"
+                  required
                 />
                 <textarea 
                   placeholder="איך נוכל לעזור?" 
                   rows={3}
                   className="w-full bg-black/50 border border-white/10 p-5 rounded-2xl focus:border-blue-500 outline-none transition-all italic"
                 ></textarea>
-                <button className="w-full py-5 bg-blue-600 hover:bg-white hover:text-black text-white font-black rounded-2xl transition-all flex items-center justify-center gap-3">
+                <button type="submit" className="w-full py-5 bg-blue-600 hover:bg-white hover:text-black text-white font-black rounded-2xl transition-all flex items-center justify-center gap-3">
                   <Send size={20} />
                   שליחת בקשה
                 </button>
               </form>
             </div>
-          </div>
-
-          <div className="mt-20 opacity-20 font-mono text-[10px] tracking-[0.5em] uppercase text-center italic">
-            Victor_Tahar_Security_Systems_2026 // Connect_Protocol
           </div>
         </motion.div>
       </section>
